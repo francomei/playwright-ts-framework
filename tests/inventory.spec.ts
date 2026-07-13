@@ -31,5 +31,6 @@ test("Products have price", async ({ page }) => {
   await login.navigate();
   await login.login("standard_user", "secret_sauce");
   await inventory.validateProductPrices();
+  
 });
 
