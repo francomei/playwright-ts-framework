@@ -13,8 +13,16 @@ export class InventoryPage {
 
   async validateProductPrices() {
     const prices = this.page.locator(".inventory_item_price");
+    
     await expect(prices).toHaveCount(6);
-    await expect(prices).toHaveText("$");
-    await expect(prices).toBeTruthy();
+
+    const count = await prices.count();
+
+    for (let i = 0; i < count; i++) {
+        const text = await prices.nth(i).textContent();
+
+        expect(text).toMatch(/^\$\d+\.\d{2}$/);
+    }
+
   }
 }
