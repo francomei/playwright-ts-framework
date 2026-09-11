@@ -57,13 +57,28 @@ test('TC-005 - Completar checkout', async ({ page }) => {
   
   await page.locator('#mat-expansion-panel-header-0').click();
 
+  // Fill in payment details
   await page.getByText('Name').fill('John Doe');
   await page.getByText('Card Number').fill('2222333344445555');
-  await page.getByRole('combobox', { name: /Expiry Month/i }).click();
-    await page.getByRole('option', { name: '5' }).nth(1).click();
+  
+  const month = page.getByRole('combobox', { name: /Expiry Month/i });
+  await month.click();
+  await month.press('ArrowDown');
+  await month.press('Enter');
+  
+  const year = page.getByRole('combobox', { name: /Expiry Year/i })
+  await year.click();
+  await year.press('ArrowDown');
+  await year.press('ArrowDown');
+  await year.press('ArrowDown');
+  await year.press('Enter');
+  
+  await page.locator('#submitButton').click();
+  await page.getByRole('radio').first().check();
+  await page.getByRole('button', { name: /Proceed to review/i }).click();
 
-  await page.getByRole('combobox', { name: /Expiry Year/i }).click();
-    await page.getByRole('option', { name: '2085' }).last().click();
-
-
+  await page.getByRole('button', { name: /Complete your purchase/i }).click();
+  
+  await page.getByText('Thank you for your purchase!').waitFor();
+  
 });
